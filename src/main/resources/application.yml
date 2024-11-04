@@ -1,0 +1,14 @@
+server:
+  port: 9991
+spring:
+  application:
+    name: Content-Service
+  config:
+    import: optional:configserver:${CONFIG_SERVER_ENDPOINT:http://localhost:9999}
+  datasource:
+    driver-class-name: ${DRIVER_CLASS_NAME:org.postgresql.Driver}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/content-service}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    hikari:
+      schema: public
