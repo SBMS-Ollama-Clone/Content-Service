@@ -5,6 +5,10 @@ spring:
     name: Content-Service
   config:
     import: optional:configserver:${CONFIG_SERVER_ENDPOINT:http://localhost:9999}
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_ENDPOINT:http://localhost:9999}
+      fail-fast: true
   datasource:
     driver-class-name: ${DRIVER_CLASS_NAME:org.postgresql.Driver}
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/content-service}
