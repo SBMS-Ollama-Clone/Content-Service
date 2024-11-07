@@ -2,9 +2,11 @@ package com.kkimleang.contentservice.service;
 
 import com.kkimleang.contentservice.dto.ContentRequest;
 import com.kkimleang.contentservice.dto.ContentResponse;
+import com.kkimleang.contentservice.dto.Response;
 import com.kkimleang.contentservice.exception.ResourceNotFoundException;
 import com.kkimleang.contentservice.model.Content;
 import com.kkimleang.contentservice.repository.ContentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +58,9 @@ public class ContentServiceImpl implements ContentService {
         return ContentResponse.fromContents(contentRepository.findAllByChatId(chatId));
     }
 
+    @Transactional
     @Override
-    public Boolean deleteContentsByChatId(String chatId) {
+    public Integer deleteAllContentsByChatId(String chatId) {
         return contentRepository.deleteAllByChatId(chatId);
     }
 }

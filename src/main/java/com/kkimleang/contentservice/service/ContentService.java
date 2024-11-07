@@ -11,5 +11,5 @@ public interface ContentService {
     ContentResponse updateContent(String contentId, ContentRequest content);
     Boolean deleteContent(String contentId);
     List<ContentResponse> getAllContentsByChatId(String chatId);
-    Boolean deleteContentsByChatId(String chatId);
+    Integer deleteAllContentsByChatId(String chatId);
 }

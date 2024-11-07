@@ -32,4 +32,14 @@ public class ContentController {
         return Response.<ContentResponse>ok()
                 .setPayload(contentService.updateContent(contentId, contentRequest));
     }
+
+    @DeleteMapping("/{chatId}/delete/all")
+    public Response<String> deleteAllContents(@PathVariable String chatId) {
+        Integer deleted = contentService.deleteAllContentsByChatId(chatId);
+        if (deleted > 0) {
+            return Response.<String>ok().setPayload("Deleted " + deleted + " contents");
+        } else {
+            return Response.<String>notFound().setErrors("No content found");
+        }
+    }
 }
