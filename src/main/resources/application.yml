@@ -16,3 +16,7 @@ spring:
     password: ${DATASOURCE_PASSWORD:postgres}
     hikari:
       schema: public
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URIS:http://localhost:9200}
+    username: ${ELASTICSEARCH_USERNAME:elastic}
+    password: ${ELASTICSEARCH_PASSWORD:changeme}

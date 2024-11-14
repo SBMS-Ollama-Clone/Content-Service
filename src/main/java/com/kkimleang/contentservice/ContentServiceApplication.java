@@ -1,8 +1,12 @@
 package com.kkimleang.contentservice;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.data.elasticsearch.repository.config.*;
+import org.springframework.data.jpa.repository.config.*;
 
+@EnableElasticsearchRepositories(basePackages = "com.kkimleang.contentservice.elastic")
+@EnableJpaRepositories(basePackages = "com.kkimleang.contentservice.repository")
 @SpringBootApplication
 public class ContentServiceApplication {
 

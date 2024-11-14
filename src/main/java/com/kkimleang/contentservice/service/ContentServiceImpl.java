@@ -1,21 +1,22 @@
 package com.kkimleang.contentservice.service;
 
-import com.kkimleang.contentservice.dto.ContentRequest;
-import com.kkimleang.contentservice.dto.ContentResponse;
-import com.kkimleang.contentservice.dto.Response;
-import com.kkimleang.contentservice.exception.ResourceNotFoundException;
-import com.kkimleang.contentservice.model.Content;
-import com.kkimleang.contentservice.repository.ContentRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.kkimleang.contentservice.dto.*;
+import com.kkimleang.contentservice.elastic.*;
+import com.kkimleang.contentservice.exception.*;
+import com.kkimleang.contentservice.model.*;
+import com.kkimleang.contentservice.repository.*;
+import jakarta.transaction.*;
+import java.util.*;
+import lombok.*;
+import lombok.extern.slf4j.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
     private final ContentRepository contentRepository;
+    private final ContentElasticRepository contentElasticRepository;
 
     @Override
     public ContentResponse createContent(ContentRequest content) {
@@ -26,6 +27,7 @@ public class ContentServiceImpl implements ContentService {
         newContent.setMessage(content.getMessage());
         newContent.setMessageType(Content.MessageType.valueOf(content.getMessageType()));
         newContent = contentRepository.save(newContent);
+        contentElasticRepository.save(newContent);
         return ContentResponse.fromContent(newContent);
     }
 
@@ -55,7 +57,22 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public List<ContentResponse> getAllContentsByChatId(String chatId) {
-        return ContentResponse.fromContents(contentRepository.findAllByChatId(chatId));
+        try {
+            List<Content> contents = contentElasticRepository.findAllByChatId(chatId);
+            if (contents.isEmpty()) {
+                List<Content> dbContents = contentRepository.findAllByChatId(chatId);
+                if (dbContents.isEmpty()) {
+                    return new ArrayList<>();
+                } else {
+                    return ContentResponse.fromContents(dbContents);
+                }
+            } else {
+                return ContentResponse.fromContents(contents);
+            }
+        } catch (Exception e) {
+            log.error("Error: {}", e.getMessage(), e);
+            throw new ResourceNotFoundException("No contents of chat id: " + chatId + " found");
+        }
     }
 
     @Transactional

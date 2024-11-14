@@ -31,8 +31,8 @@ public class ContentResponse {
         contentResponse.setModelName(content.getModelName());
         contentResponse.setMessage(content.getMessage());
         contentResponse.setMessageType(String.valueOf(content.getMessageType()));
-        contentResponse.setCreatedAt(content.getCreatedAt().toString());
-        contentResponse.setUpdatedAt(content.getUpdatedAt().toString());
+//        contentResponse.setCreatedAt(content.getCreatedAt().toString());
+//        contentResponse.setUpdatedAt(content.getUpdatedAt().toString());
         return contentResponse;
     }
 }

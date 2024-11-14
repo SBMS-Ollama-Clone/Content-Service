@@ -1,15 +1,15 @@
 package com.kkimleang.contentservice.model;
 
 
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.UuidGenerator;
+import java.time.*;
+import java.util.*;
+import lombok.*;
+import org.hibernate.annotations.*;
+import org.springframework.data.elasticsearch.annotations.*;
 
-import java.time.Instant;
-import java.util.UUID;
-
+@Document(indexName = "contents")
 @Getter
 @Setter
 @ToString
@@ -17,6 +17,7 @@ import java.util.UUID;
 @Table(name = "tb_contents")
 public class Content {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue
     @UuidGenerator
     private String id;
@@ -29,7 +30,8 @@ public class Content {
     private String chatId;
     @Column(name = "model_name", nullable = false)
     private String modelName;
-    @Column(name = "message", nullable = false, length = 2048)
+    @Lob
+    @Column(name = "message", nullable = false)
     private String message;
 
     public enum MessageType {
@@ -39,8 +41,10 @@ public class Content {
     @Column(name = "message_type", nullable = false)
     private MessageType messageType;
 
+    @Field(type = FieldType.Date)
     @Column(name = "created_at")
     private Instant createdAt;
+    @Field(type = FieldType.Date)
     @Column(name = "updated_at")
     private Instant updatedAt;
     @PrePersist

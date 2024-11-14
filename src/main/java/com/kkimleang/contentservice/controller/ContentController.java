@@ -1,13 +1,10 @@
 package com.kkimleang.contentservice.controller;
 
-import com.kkimleang.contentservice.dto.ContentRequest;
-import com.kkimleang.contentservice.dto.ContentResponse;
-import com.kkimleang.contentservice.dto.Response;
-import com.kkimleang.contentservice.service.ContentService;
-import lombok.RequiredArgsConstructor;
+import com.kkimleang.contentservice.dto.*;
+import com.kkimleang.contentservice.service.*;
+import java.util.*;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/contents")
@@ -17,8 +14,12 @@ public class ContentController {
 
     @GetMapping("/{chatId}/all")
     public Response<List<ContentResponse>> getAllContent(@PathVariable String chatId) {
-        return Response.<List<ContentResponse>>ok()
-                .setPayload(contentService.getAllContentsByChatId(chatId));
+        try {
+            return Response.<List<ContentResponse>>ok()
+                    .setPayload(contentService.getAllContentsByChatId(chatId));
+        } catch (Exception e) {
+            return Response.<List<ContentResponse>>notFound().setErrors(e.getMessage());
+        }
     }
 
     @PostMapping
