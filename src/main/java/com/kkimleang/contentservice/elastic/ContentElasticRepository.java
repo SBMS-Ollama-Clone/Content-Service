@@ -7,5 +7,5 @@ import org.springframework.stereotype.*;
 
 @Repository
 public interface ContentElasticRepository extends ElasticsearchRepository<Content, String> {
-    List<Content> findAllByChatId(String chatId);
+    List<Content> findAllByChatIdOrderByCreatedAtAsc(String chatId);
 }

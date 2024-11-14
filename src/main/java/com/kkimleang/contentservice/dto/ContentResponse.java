@@ -1,5 +1,6 @@
 package com.kkimleang.contentservice.dto;
 
+import com.fasterxml.jackson.annotation.*;
 import com.kkimleang.contentservice.model.Content;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContentResponse {
     private String contentId;
     private String chatId;

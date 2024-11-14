@@ -1,5 +1,6 @@
 package com.kkimleang.contentservice;
 
+import com.fasterxml.jackson.databind.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.data.elasticsearch.repository.config.*;

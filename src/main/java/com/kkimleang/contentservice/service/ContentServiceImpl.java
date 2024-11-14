@@ -55,19 +55,24 @@ public class ContentServiceImpl implements ContentService {
         return true;
     }
 
+    @Transactional
     @Override
     public List<ContentResponse> getAllContentsByChatId(String chatId) {
         try {
-            List<Content> contents = contentElasticRepository.findAllByChatId(chatId);
-            if (contents.isEmpty()) {
+            try {
+                List<Content> contents = contentElasticRepository.findAllByChatIdOrderByCreatedAtAsc(chatId);
+                log.info(contents.toString());
+                if (contents.isEmpty()) {
+                    throw new Exception("No contents found in elastic search");
+                }
+                return ContentResponse.fromContents(contents);
+            } catch (Exception e) {
+                log.error("Error: {}", e.getMessage());
                 List<Content> dbContents = contentRepository.findAllByChatId(chatId);
                 if (dbContents.isEmpty()) {
                     return new ArrayList<>();
-                } else {
-                    return ContentResponse.fromContents(dbContents);
                 }
-            } else {
-                return ContentResponse.fromContents(contents);
+                return ContentResponse.fromContents(dbContents);
             }
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage(), e);

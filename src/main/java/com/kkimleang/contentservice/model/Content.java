@@ -1,6 +1,10 @@
 package com.kkimleang.contentservice.model;
 
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
+import com.fasterxml.jackson.datatype.jsr310.deser.*;
+import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import java.time.*;
@@ -15,6 +19,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @ToString
 @Entity
 @Table(name = "tb_contents")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Content {
     @Id
     @org.springframework.data.annotation.Id
@@ -30,8 +35,8 @@ public class Content {
     private String chatId;
     @Column(name = "model_name", nullable = false)
     private String modelName;
-    @Lob
-    @Column(name = "message", nullable = false)
+
+    @Column(name = "message", nullable = false, length = 10000)
     private String message;
 
     public enum MessageType {
@@ -41,15 +46,20 @@ public class Content {
     @Column(name = "message_type", nullable = false)
     private MessageType messageType;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Field(type = FieldType.Date)
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Field(type = FieldType.Date)
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
     @PrePersist
     public void prePersist() {
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }
